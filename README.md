@@ -1,4 +1,4 @@
-# Keyboard Overlay for Low-End PCs
+# Overkeys, a Keyboard Overlay for Low-End PCs
 
 A lightweight Python keyboard overlay application designed for low-end PCs. It visually displays key presses on your screen in real-time without consuming significant system resources. Perfect for streamers, content creators, or anyone who wants an on-screen representation of keyboard input.
 
