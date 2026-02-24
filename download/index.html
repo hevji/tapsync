@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Downloading...</title>
+</head>
+<body>
+  <p>Your download should start automatically.</p>
+  <p>If it doesn’t, <a href="file.zip" download>click here</a>.</p>
+
+  <script>
+    window.onload = function () {
+      const link = document.createElement("a");
+      link.href = "https://github.com/hevji/overkeys/releases/download/Test/TR.Clean.oreo.sample.wav"; // file path or URL
+      link.download = "file.zip"; // optional filename
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+  </script>
+</body>
+</html>
