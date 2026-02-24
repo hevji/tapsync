@@ -1,123 +1,173 @@
-# Overkeys, a Keyboard Overlay for Low-End PCs
+# ⌨️ Overkeys (`Key`board `Over`lay)
 
-A lightweight Python keyboard overlay application designed for low-end PCs. It visually displays key presses on your screen in real-time without consuming significant system resources. Perfect for streamers, content creators, or anyone who wants an on-screen representation of keyboard input.
+A real-time keyboard and mouse overlay for streamers, built with Python, PyQt6 and pynput. Keys and mouse buttons light up as you press them — designed to be captured cleanly in OBS as a window source.
 
-> **Privacy Note:** This script listens to your keyboard input to display key presses on the overlay, but it **does not send any data to the internet, webhooks, or third-party services.** All input is handled locally.
-
----
-
-## Features
-
-* **Low Resource Usage:** Designed specifically to run smoothly on low-end PCs.
-* **Real-Time Key Display:** Shows pressed keys instantly.
-* **Customizable Overlay:** Adjust size, position, color, and opacity.
-* **Lightweight Dependencies:** Minimal Python libraries required.
-* **Cross-Platform Support:** Works on Windows, with experimental support for Linux.
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=flat-square&logo=python)
+![PyQt6](https://img.shields.io/badge/PyQt6-6.x-green?style=flat-square)
+![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
+![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey?style=flat-square)
 
 ---
 
-## Requirements
+## ✨ Features
 
-* **Python 3.10+**
-* **Pynput** – for keyboard input detection
-* **PyQt6** – for overlay GUI (included with most Python installations)
+- **Real-time key highlighting** — keys and mouse buttons light up instantly on press, no polling lag
+- **Full layout support** — QWERTY and AZERTY out of the box
+- **Built-in presets** — Full Keyboard, No F-Keys, Left Half, Gaming/WASD, Numpad
+- **Visual drag-and-drop editor** — move keys anywhere, snap-to-grid or free placement
+- **Per-key customisation** — individual colour, text colour, label, width, height
+- **Theme editor** — background, idle/pressed colours, font, corner radius, key size, gap
+- **Save / load configs** — stored as JSON in your system's config folder
+- **Import / export** — share layouts as `.json` files
+- **Transparent overlay** — borderless window with alpha transparency, works with OBS Window Capture
+- **Colour-coded log panel** — see exactly what's happening or what failed in real time
 
 ---
 
-## Installation
+## 📸 Screenshots
 
-1. Clone the repository:
+![Presets](images/screenshot1.png)
+![Editor](images/screenshot2.png)
+
+`i dont rlly know what to screenshot so you got 2 be happy`
+
+---
+
+## 🚀 Installation
+
+### Requirements
+
+- Python 3.10 or newer
+- Windows, macOS, or Linux
+
+### Steps
 
 ```bash
+# 1. Clone the repo
 git clone https://github.com/hevji/overkeys.git
 cd overkeys
-```
 
-2. Create and activate a virtual environment (optional but recommended):
-
-```bash
-python -m venv venv
-# Windows
-venv\Scripts\activate
-# Linux/Mac
-source venv/bin/activate
-```
-
-3. Install dependencies:
-
-```bash
+# 2. Install dependencies
 pip install -r requirements.txt
+
+# 3. Run
+python main.py
+```
+
+### Dependencies
+
+```
+PyQt6
+pynput
 ```
 
 ---
 
-## Usage
+## 🖥️ OBS Setup
 
-Run the overlay with:
+1. Run `python main.py` and click **▶ Show Overlay** in the Overlay tab
+2. In OBS, click **+** under Sources → **Window Capture**
+3. Select the window titled **Keyboard Overlay**
+4. In the source properties, enable **Allow Transparency**
+5. Resize and reposition the source in your scene as needed
 
-```bash
-main.py
+> **Tip:** On Windows you can also use a **Color Key** filter in OBS to key out the background colour if transparency doesn't work with your capture method.
+
+---
+
+## 🗂️ Project Structure
+
+```
+keyboard-overlay/
+├── main.py          # Entry point — PyQt6 app and all tabs
+├── overlay.py       # Borderless transparent overlay window
+├── editor.py        # Drag-and-drop layout editor + properties panel
+├── presets.py       # Built-in keyboard layout presets
+├── config.py        # Save / load JSON configs
+├── listener.py      # pynput keyboard and mouse listener
+└── requirements.txt
 ```
 
-### Configuration Options
+---
 
-* **Position:** Set the overlay position (x, y) in `config.ini`.
-* **Opacity:** Adjust transparency to avoid blocking important parts of the screen.
-* **Size:** Change key size and spacing to fit your screen resolution.
-* **Colors:** Customize key color, text color, and pressed key highlight color.
+## 🎨 Customisation
 
-Example `config.ini`:
+### Theme tab
 
-```ini
-[Overlay]
-x = 100
-y = 100
-opacity = 0.8
-key_size = 50
-text_color = #FFFFFF
-highlight_color = #00FF00
+Everything visual is adjustable without touching code:
+
+| Setting | What it controls |
+|---|---|
+| Key Idle / Pressed colour | Background colour of keys at rest and when held |
+| Mouse Idle / Pressed | Same for mouse buttons |
+| Key Outline | Border colour |
+| Font family / size / bold | Key label text |
+| Corner Radius | How rounded the key corners are (0 = sharp) |
+| Key Width / Height / Gap | Overall key sizing in pixels |
+| Overlay Opacity | Transparency of the whole overlay window |
+
+### Per-key overrides
+
+In the **Editor** tab, click any key to select it and use the properties panel on the right to override its colour, text colour, label, width, and height individually. The WASD preset uses this to highlight movement keys in purple by default.
+
+### Layouts
+
+Layouts are stored as `.json` files. You can edit them by hand if you want — each key has:
+
+```json
+{
+  "id":         "w",
+  "label":      "W",
+  "x":          2.5,
+  "y":          2.0,
+  "w":          1.0,
+  "h":          1.0,
+  "color":      null,
+  "text_color": null
+}
 ```
 
----
-
-## How It Works
-
-1. The app listens for keyboard input using `pynput`.
-2. The pressed keys are rendered on a transparent Tkinter window.
-3. Key release events are immediately reflected, ensuring real-time display.
-4. The overlay remains always on top, with minimal CPU and RAM usage.
+`x` and `y` are in grid units, `w` and `h` are key width/height multipliers (e.g. `2.0` = double-wide key).
 
 ---
 
-## Optimization Tips for Low-End PCs
+## 💾 Config Storage
 
-* Reduce the number of displayed keys to only essential ones.
-* Lower overlay opacity instead of rendering complex graphics.
-* Avoid running multiple Python overlays simultaneously.
-* Use `.png` or `.ico` files sparingly if using custom key icons.
-* Keep Python updated to improve performance with Tkinter.
+Configs are saved automatically to your system's standard config folder:
 
----
+| OS | Path |
+|---|---|
+| Windows | `%APPDATA%\KeyboardOverlay\configs\` |
+| macOS | `~/Library/Application Support/KeyboardOverlay/configs/` |
+| Linux | `~/.config/KeyboardOverlay/configs/` |
 
-## Contribution
-
-Contributions are welcome! If you want to add features or improve performance:
-
-1. Fork the repository
-2. Create a new branch
-3. Commit your changes
-4. Open a Pull Request
+Global settings (theme, last loaded config, overlay position) are saved to `settings.json` in the parent folder.
 
 ---
 
-## License
+## ⚠️ Platform Notes
 
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+### macOS
+pynput requires **Accessibility permissions** to read keystrokes. Go to:
+`System Preferences → Privacy & Security → Accessibility` and add your terminal or Python.
+
+Without this, key detection will silently fail — you'll see a warning in the Log tab.
+
+### Linux
+For the transparent overlay background to work you need a compositor running (e.g. **picom** or **compton** on X11, or a Wayland compositor that supports it).
+
+### Windows
+Works out of the box. For the cleanest OBS capture use **Window Capture** with **Allow Transparency** ticked. If that's not available in your OBS version, use a **Color Key** filter instead.
 
 ---
 
-## Acknowledgements
+## 🛠️ Built With
 
-* [Pynput](https://pypi.org/project/pynput/) – Keyboard and mouse input handling
-* PyQt6 – GUI overlay rendering
-* Low-end PC users who inspired a lightweight design
+- [PyQt6](https://pypi.org/project/PyQt6/) — GUI framework
+- [pynput](https://pypi.org/project/pynput/) — Global keyboard and mouse listener
+
+---
+
+## 📄 License
+
+MIT — do whatever you want with it.
