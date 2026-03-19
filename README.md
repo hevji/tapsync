@@ -1,4 +1,4 @@
-# ⌨️ Kryns (Keyboard Overlay for Streaming)
+# ⌨️ Overkeys (Keyboard Overlay for Streaming)
 
 A real-time keyboard and mouse overlay for streamers, built with Python, PyQt6 and pynput. Keys and mouse buttons light up as you press them — designed to be captured cleanly in OBS as a window source.
 
